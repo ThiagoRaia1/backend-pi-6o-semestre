@@ -13,4 +13,7 @@ export class Usuario {
 
   @Column()
   password: string;
+
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean;
 }

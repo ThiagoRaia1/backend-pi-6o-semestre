@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsEmail, IsStrongPassword } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEmail,
+  IsStrongPassword,
+  IsBoolean,
+} from 'class-validator';
 
 export class CreateUsuarioDto {
   @IsNotEmpty({ message: 'Nome é obrigatório' })
@@ -13,4 +18,8 @@ export class CreateUsuarioDto {
     { message: 'Senha fraca' },
   )
   password: string;
+
+  @IsNotEmpty({ message: 'O campo de aluno ativo deve ser preenchido.' })
+  @IsBoolean({ message: 'O campo aceita apenas "true" ou "false"' })
+  isActive: boolean;
 }

@@ -9,6 +9,7 @@ async function bootstrap() {
       transform: true, // transforma os dados de entrada para o tipo correto
       whitelist: true, // remove campos que não estão no DTO
       forbidNonWhitelisted: true, // retorna erro se tiver campos que não estão no DTO
+      stopAtFirstError: true // retorna apenas o primeiro erro que ocorrer
     }),
   );
   await app.listen(3000);

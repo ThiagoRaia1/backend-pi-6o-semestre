@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsEmail,
@@ -16,7 +17,8 @@ export class CreateAlunoDto {
   cpf: string;
 
   @IsNotEmpty({ message: 'Data de nascimento é obrigatória' })
-  @IsDate({ message: 'Deve ser uma data válida' })
+  @IsDate({ message: 'Deve ser uma data válida' }) // depois os validators
+  @Type(() => Date) // Verifica os transformers primeiro
   birthDate: Date;
 
   @IsEmail({}, { message: 'E-mail inválido' })
@@ -29,5 +31,5 @@ export class CreateAlunoDto {
 
   @IsNotEmpty({ message: 'O campo de aluno ativo deve ser preenchido.' })
   @IsBoolean({ message: 'O campo aceita apenas "true" ou "false"' })
-  isActive: boolean;
+  isActive: boolean = true;
 }

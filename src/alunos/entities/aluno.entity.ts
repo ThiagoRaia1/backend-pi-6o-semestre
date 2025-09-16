@@ -20,6 +20,6 @@ export class Aluno {
   @Column()
   cellphone: string;
 
-  @Column()
+  @Column({ type: 'boolean', default: true })
   isActive: boolean;
 }
