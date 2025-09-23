@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usuariosService: UsuariosService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, password: string) {
     // Buscamos o usuário pelo e-mail
@@ -22,11 +22,14 @@ export class AuthService {
     return null;
   }
 
-  async login(user: { email: string; id: number }) {
-    // Geramos o token JWT
-    const payload = { email: user.email, id: user.id };
+  async login(user: { id: number, name: string }) {
+    // Geramos o token JWT apenas com o ID do usuário para não mantermos nenhuma informação sensível no token
+    // O ID é passado para que possamos buscar outros dados quando necessário mas sem os armazenar
+    const payload = { sub: user.id };
+    // Retornamos o token e o nome do usuário separadamente, pois apenas o token será salvo no AsyncStorage enquanto name permanecerá apenas no contexto da aplicação
     return {
       access_token: this.jwtService.sign(payload),
+      name: user.name
     };
   }
 }
