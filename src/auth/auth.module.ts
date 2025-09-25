@@ -4,17 +4,24 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { UsuariosModule } from 'src/usuarios/usuarios.module';
 import { AuthGuard } from './auth.guard';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AlunosModule } from 'src/alunos/alunos.module';
 
 @Module({
   imports: [
     UsuariosModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret', // A chave secreta do JWT
-      signOptions: { expiresIn: '1h' }, // O token expira em 1 hora
+    AlunosModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard],
-  exports: [AuthGuard],
+  exports: [JwtModule, AuthGuard],
 })
 export class AuthModule {}

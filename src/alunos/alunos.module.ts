@@ -4,13 +4,18 @@ import { AlunosController } from './alunos.controller';
 import { Aluno } from './entities/aluno.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Aluno]),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret',
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
     }),
   ],
   controllers: [AlunosController],
@@ -18,3 +23,5 @@ import { JwtModule } from '@nestjs/jwt';
   exports: [AlunosService],
 })
 export class AlunosModule {}
+
+console.log('PROCESS ENV DATABASE_URL:', process.env.JWT_SECRET);

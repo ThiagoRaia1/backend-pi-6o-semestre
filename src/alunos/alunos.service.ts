@@ -22,7 +22,7 @@ export class AlunosService {
   }
 
   findOneById(id: number) {
-    return `This action returns a #${id} aluno`;
+    return this.alunosRepository.findOneBy({ id });
   }
 
   findOneByName(name: string) {
