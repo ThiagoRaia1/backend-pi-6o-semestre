@@ -4,6 +4,7 @@ import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { Aluno } from './entities/aluno.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Aula } from 'src/aulas/entities/aula.entity';
 
 @Injectable()
 export class AlunosService {
@@ -13,8 +14,29 @@ export class AlunosService {
   ) {}
 
   async create(createAlunoDto: CreateAlunoDto) {
-    const aluno = this.alunosRepository.create(createAlunoDto); // Passamos a senha criptografada e o restante dos dados
+    const { aulas, ...rest } = createAlunoDto;
+
+    const aluno = this.alunosRepository.create({
+      ...rest,
+      aulas: aulas?.map((id) => ({ id }) as Aula), // transforma ids em objetos
+    });
+
     return this.alunosRepository.save(aluno);
+  }
+
+  async createData(createAlunoDto: CreateAlunoDto[]) {
+    // Transforma os DTOs em algo compatível com a entidade
+    const alunos = createAlunoDto.map((dto) => {
+      const { aulas, ...rest } = dto;
+
+      return this.alunosRepository.create({
+        ...rest,
+        aulas: aulas?.map((id) => ({ id }) as Aula), // transforma [1,2] em [{id:1},{id:2}]
+      });
+    });
+
+    // Salva todos de uma vez
+    return this.alunosRepository.save(alunos);
   }
 
   findAll() {
@@ -38,11 +60,25 @@ export class AlunosService {
   }
 
   async updateById(id: number, updateAlunoDto: UpdateAlunoDto) {
-    const aluno = await this.alunosRepository.findOneBy({ id });
+    const aluno = await this.alunosRepository.findOne({
+      where: { id },
+      relations: ['aulas'], // importante se quiser atualizar a relação
+    });
+
     if (!aluno) {
       throw new NotFoundException('Aluno não encontrado');
     }
-    this.alunosRepository.merge(aluno, updateAlunoDto);
+
+    const { aulas, ...rest } = updateAlunoDto;
+
+    // Faz o merge apenas com os campos normais
+    this.alunosRepository.merge(aluno, rest);
+
+    // Se veio aulas no DTO, transforma os ids em objetos { id }
+    if (aulas) {
+      aluno.aulas = aulas.map((id) => ({ id }) as Aula);
+    }
+
     return this.alunosRepository.save(aluno);
   }
 

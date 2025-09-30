@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Aula } from 'src/aulas/entities/aula.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Usuario {
@@ -16,4 +17,8 @@ export class Usuario {
 
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
+
+  // Um instrutor pode ter várias aulas
+  @OneToMany(() => Aula, (aula) => aula.usuario)
+  aulas: Aula[];
 }

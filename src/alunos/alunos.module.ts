@@ -23,5 +23,3 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   exports: [AlunosService],
 })
 export class AlunosModule {}
-
-console.log('PROCESS ENV DATABASE_URL:', process.env.JWT_SECRET);
