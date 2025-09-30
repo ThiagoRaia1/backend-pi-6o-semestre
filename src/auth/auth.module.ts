@@ -6,11 +6,13 @@ import { UsuariosModule } from 'src/usuarios/usuarios.module';
 import { AuthGuard } from './auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AlunosModule } from 'src/alunos/alunos.module';
+import { AulasModule } from 'src/aulas/aulas.module';
 
 @Module({
   imports: [
     UsuariosModule,
     AlunosModule,
+    AulasModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

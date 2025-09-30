@@ -23,6 +23,11 @@ export class AlunosController {
     return this.alunosService.create(createAlunoDto);
   }
 
+  @Post('data')
+  createData(@Body() createAlunoDto: CreateAlunoDto[]) {
+    return this.alunosService.createData(createAlunoDto);
+  }
+
   @Get()
   @UseGuards(AuthGuard)
   findAll() {

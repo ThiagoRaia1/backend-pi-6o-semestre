@@ -7,6 +7,7 @@ import { config } from './ormconfig';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { AlunosModule } from './alunos/alunos.module';
+import { AulasModule } from './aulas/aulas.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AlunosModule } from './alunos/alunos.module';
     UsuariosModule,
     AuthModule,
     AlunosModule,
+    AulasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
