@@ -47,8 +47,8 @@ export class AlunosService {
     return this.alunosRepository.findOneBy({ id });
   }
 
-  findOneByName(name: string) {
-    return this.alunosRepository.findOneBy({ name });
+  findOneByNome(nome: string) {
+    return this.alunosRepository.findOneBy({ nome });
   }
 
   findOneByEmail(email: string) {

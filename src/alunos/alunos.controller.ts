@@ -40,10 +40,10 @@ export class AlunosController {
     return this.alunosService.findOneById(+id);
   }
 
-  @Get('name/:name')
+  @Get('nome/:nome')
   @UseGuards(AuthGuard)
-  findOneByName(@Param('name') name: string) {
-    return this.alunosService.findOneByName(name);
+  findOneByNome(@Param('nome') nome: string) {
+    return this.alunosService.findOneByNome(nome);
   }
 
   @Get('email/:email')

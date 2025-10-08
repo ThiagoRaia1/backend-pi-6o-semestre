@@ -7,16 +7,16 @@ export class Usuario {
   id: number;
 
   @Column()
-  name: string;
+  nome: string;
 
   @Column()
   email: string;
 
   @Column()
-  password: string;
+  senha: string;
 
   @Column({ type: 'boolean', default: true })
-  isActive: boolean;
+  isAtivo: boolean;
 
   // Um instrutor pode ter várias aulas
   @OneToMany(() => Aula, (aula) => aula.usuario)

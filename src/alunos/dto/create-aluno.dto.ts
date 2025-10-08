@@ -12,7 +12,7 @@ import {
 export class CreateAlunoDto {
   @IsNotEmpty({ message: 'Nome é obrigatório' })
   @IsString({ message: 'Nome deve ser um texto válido' })
-  name: string;
+  nome: string;
 
   @IsNotEmpty({ message: 'CPF é obrigatório' })
   @IsString({ message: 'CPF deve ser um texto válido' })
@@ -21,18 +21,21 @@ export class CreateAlunoDto {
   @IsNotEmpty({ message: 'Data de nascimento é obrigatória' })
   @IsDateString({}, { message: 'Deve ser uma data válida' }) // depois os validators
   @Type(() => Date) // Verifica os transformers primeiro
-  birthDate: Date;
+  dataNascimento: Date;
 
   @IsEmail({}, { message: 'E-mail inválido' })
   email: string;
 
   @IsNotEmpty({ message: 'Celular é obrigatório' })
   @IsString({ message: 'Celular deve ser um texto válido' })
-  cellphone: string;
+  telefone: string;
+
+  @IsOptional()
+  descricao?: string;
 
   @IsNotEmpty({ message: 'O campo de aluno ativo deve ser preenchido.' })
   @IsBoolean({ message: 'O campo aceita apenas "true" ou "false"' })
-  isActive: boolean = true;
+  isAtivo: boolean = true;
 
   @IsOptional()
   @IsArray()

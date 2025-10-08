@@ -15,7 +15,7 @@ export class Aula {
   id: number;
 
   @Column()
-  date: Date;
+  data: Date;
 
   // Relação N:N com alunos
   @ManyToMany(() => Aluno, (aluno) => aluno.aulas)

@@ -34,7 +34,7 @@ export class AulasService {
     }
 
     // Converte a string para Date
-    const data = new Date(dto.date);
+    const data = new Date(dto.data);
     const hora = data.getHours();
 
     // Validação do horário permitido (entre 7h e 18h)
@@ -46,7 +46,7 @@ export class AulasService {
 
     // Verifica se já existe uma aula nesse mesmo dia e horário
     const aulaExistente = await this.aulaRepository.findOne({
-      where: { date: data },
+      where: { data: data },
     });
 
     if (aulaExistente) {
@@ -67,7 +67,7 @@ export class AulasService {
         : [];
 
     const aula = this.aulaRepository.create({
-      date: new Date(dto.date),
+      data: new Date(dto.data),
       usuario,
       alunos,
     });
@@ -111,7 +111,7 @@ export class AulasService {
       .createQueryBuilder('aula')
       .leftJoin('aula.usuario', 'usuario')
       .leftJoin('aula.alunos', 'aluno')
-      .select(['aula.id', 'aula.date', 'usuario.name', 'aluno.name'])
+      .select(['aula.id', 'aula.data', 'usuario.nome', 'aluno.nome'])
       .getMany();
   }
 

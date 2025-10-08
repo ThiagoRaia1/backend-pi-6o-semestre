@@ -14,10 +14,10 @@ export class UsuariosService {
   ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    const password = await bcrypt.hash(createUsuarioDto.password, 10); // Usamos o bcrypt para a hash da senha
+    const senha = await bcrypt.hash(createUsuarioDto.senha, 10); // Usamos o bcrypt para a hash da senha
     const user = this.usuariosRepository.create({
       ...createUsuarioDto,
-      password,
+      senha,
     }); // Passamos a senha criptografada e o restante dos dados
     return this.usuariosRepository.save(user);
   }

@@ -7,22 +7,25 @@ export class Aluno {
   id: number;
 
   @Column()
-  name: string;
+  nome: string;
 
   @Column()
   cpf: string;
 
   @Column()
-  birthDate: Date;
+  dataNascimento: Date;
 
   @Column()
   email: string;
 
   @Column()
-  cellphone: string;
+  telefone: string;
+
+  @Column({ nullable: true })
+  descricao?: string;
 
   @Column({ type: 'boolean', default: true })
-  isActive: boolean;
+  isAtivo: boolean;
 
   // Relação N:N com aulas
   @ManyToMany(() => Aula, (aula) => aula.alunos)
