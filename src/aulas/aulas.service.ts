@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { Aluno } from 'src/alunos/entities/aluno.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
@@ -115,8 +115,31 @@ export class AulasService {
       .getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} aula`;
+  /**
+   * Retorna os horários (datas completas) do dia informado
+   * que já possuem 5 ou mais alunos registrados.
+   *
+   * @param dataDia string no formato 'YYYY-MM-DD'
+   */
+  async findHorariosCheiosPorDia(dataDia: string): Promise<Date[]> {
+    // cria intervalo do dia
+    const inicioDoDia = new Date(`${dataDia}T00:00:00`);
+    const fimDoDia = new Date(`${dataDia}T23:59:59`);
+
+    // busca as aulas do dia com os alunos
+    const aulas = await this.aulaRepository.find({
+      where: {
+        data: Between(inicioDoDia, fimDoDia),
+      },
+      relations: ['alunos'],
+    });
+
+    // filtra aulas com 5 ou mais alunos
+    const aulasCheias = aulas
+      .filter((aula) => aula.alunos.length >= 5)
+      .map((aula) => aula.data);
+
+    return aulasCheias;
   }
 
   update(id: number, updateAulaDto: UpdateAulaDto) {

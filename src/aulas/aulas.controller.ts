@@ -40,10 +40,10 @@ export class AulasController {
     return this.aulasService.findAll();
   }
 
-  @Get(':id')
+  @Get('cheias/:data')
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.aulasService.findOne(+id);
+  async getHorariosCheios(@Param('data') data: string) {
+    return this.aulasService.findHorariosCheiosPorDia(data);
   }
 
   @Patch(':id')
