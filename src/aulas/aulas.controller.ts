@@ -40,6 +40,12 @@ export class AulasController {
     return this.aulasService.findAll();
   }
 
+  @Get('registradas/:data')
+  @UseGuards(AuthGuard)
+  async getAulasRegistradas(@Param('data') data: string) {
+    return this.aulasService.findAulasRegistradas(data);
+  }
+
   @Get('cheias/:data')
   @UseGuards(AuthGuard)
   async getHorariosCheios(@Param('data') data: string) {

@@ -111,8 +111,26 @@ export class AulasService {
       .createQueryBuilder('aula')
       .leftJoin('aula.usuario', 'usuario')
       .leftJoin('aula.alunos', 'aluno')
-      .select(['aula.id', 'aula.data', 'usuario.nome', 'aluno.nome'])
+      .select(['aula.id', 'aula.data', 'usuario.nome', 'aluno.nome', 'aluno.descricao'])
       .getMany();
+  }
+
+  async findAulasRegistradas(dataDia: string): Promise<Date[]> {
+    // cria intervalo do dia
+    const inicioDoDia = new Date(`${dataDia}T00:00:00`);
+    const fimDoDia = new Date(`${dataDia}T23:59:59`);
+
+    // busca as aulas do dia com os alunos
+    const aulas = await this.aulaRepository.find({
+      where: {
+        data: Between(inicioDoDia, fimDoDia),
+      },
+    });
+
+    // filtra aulas com 5 ou mais alunos
+    const aulasRegistradas = aulas.map((aula) => aula.data);
+
+    return aulasRegistradas;
   }
 
   /**
