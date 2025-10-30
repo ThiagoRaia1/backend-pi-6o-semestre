@@ -111,7 +111,14 @@ export class AulasService {
       .createQueryBuilder('aula')
       .leftJoin('aula.usuario', 'usuario')
       .leftJoin('aula.alunos', 'aluno')
-      .select(['aula.id', 'aula.data', 'usuario.nome', 'aluno.nome', 'aluno.descricao'])
+      .select([
+        'aula.id',
+        'aula.data',
+        'usuario.nome',
+        'aluno.id',
+        'aluno.nome',
+        'aluno.descricao',
+      ])
       .getMany();
   }
 
@@ -160,8 +167,26 @@ export class AulasService {
     return aulasCheias;
   }
 
-  update(id: number, updateAulaDto: UpdateAulaDto) {
-    return `This action updates a #${id} aula`;
+  async update(id: number, updateAulaDto: UpdateAulaDto) {
+    const aula = await this.aulaRepository.findOne({
+      where: { id },
+      relations: ['alunos'],
+    });
+
+    if (!aula) {
+      throw new NotFoundException(`Aula com ID ${id} não encontrada`);
+    }
+
+    if (updateAulaDto.alunosIds && updateAulaDto.alunosIds.length > 0) {
+      const alunos = await this.alunoRepository.find({
+        where: { id: In(updateAulaDto.alunosIds) },
+      });
+      aula.alunos = alunos;
+    } else {
+      aula.alunos = []; // remove todos os alunos se vier um array vazio
+    }
+
+    return this.aulaRepository.save(aula);
   }
 
   async remove(id: number) {

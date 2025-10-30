@@ -52,6 +52,7 @@ export class AulasController {
     return this.aulasService.findHorariosCheiosPorDia(data);
   }
 
+  // Atualiza os alunos cadastrados na aula selecionada
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updateAulaDto: UpdateAulaDto) {

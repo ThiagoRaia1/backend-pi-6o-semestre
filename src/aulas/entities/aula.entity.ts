@@ -17,6 +17,9 @@ export class Aula {
   @Column()
   data: Date;
 
+  @Column({ nullable: true })
+  planoDeAula?: string;
+
   // Relação N:N com alunos
   @ManyToMany(() => Aluno, (aluno) => aluno.aulas)
   @JoinTable() // cria a tabela de junção aula_alunos
