@@ -82,6 +82,28 @@ export class AlunosService {
     return this.alunosRepository.save(aluno);
   }
 
+  async ativar(id: number): Promise<Aluno> {
+    const aluno = await this.alunosRepository.findOne({ where: { id } });
+
+    if (!aluno) {
+      throw new NotFoundException('Aluno não encontrado');
+    }
+
+    aluno.isAtivo = true;
+    return this.alunosRepository.save(aluno);
+  }
+
+  async desativar(id: number): Promise<Aluno> {
+    const aluno = await this.alunosRepository.findOne({ where: { id } });
+
+    if (!aluno) {
+      throw new NotFoundException('Aluno não encontrado');
+    }
+
+    aluno.isAtivo = false;
+    return this.alunosRepository.save(aluno);
+  }
+
   async removeById(id: number) {
     const aluno = await this.alunosRepository.findOneBy({ id });
     if (!aluno) {

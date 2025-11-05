@@ -64,6 +64,18 @@ export class AlunosController {
     return this.alunosService.updateById(+id, updateAlunoDto);
   }
 
+  @Patch('ativar/:id')
+  @UseGuards(AuthGuard)
+  ativar(@Param('id') id: number) {
+    return this.alunosService.ativar(+id);
+  }
+
+  @Patch('desativar/:id')
+  @UseGuards(AuthGuard)
+  desativar(@Param('id') id: number) {
+    return this.alunosService.desativar(+id);
+  }
+
   @Delete(':id')
   @UseGuards(AuthGuard)
   removeById(@Param('id') id: string) {
