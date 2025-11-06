@@ -40,6 +40,18 @@ export class UsuariosController {
     return this.usuariosService.update(+id, updateUsuarioDto);
   }
 
+  @Patch('ativar/:id')
+  @UseGuards(AuthGuard)
+  ativar(@Param('id') id: number) {
+    return this.usuariosService.ativar(+id);
+  }
+
+  @Patch('desativar/:id')
+  @UseGuards(AuthGuard)
+  desativar(@Param('id') id: number) {
+    return this.usuariosService.desativar(+id);
+  }
+
   @Delete(':id')
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

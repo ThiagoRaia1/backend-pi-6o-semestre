@@ -29,7 +29,7 @@ export class UsuariosService {
   findOne(id: number) {
     return `This action returns a #${id} usuario`;
   }
-  
+
   findOneByEmail(email: string) {
     return this.usuariosRepository.findOneBy({ email });
   }
@@ -41,6 +41,28 @@ export class UsuariosService {
     }
     this.usuariosRepository.merge(user, updateUsuarioDto);
     return this.usuariosRepository.save(user);
+  }
+
+  async ativar(id: number): Promise<Usuario> {
+    const usuario = await this.usuariosRepository.findOne({ where: { id } });
+
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    usuario.isAtivo = true;
+    return this.usuariosRepository.save(usuario);
+  }
+
+  async desativar(id: number): Promise<Usuario> {
+    const usuario = await this.usuariosRepository.findOne({ where: { id } });
+
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    usuario.isAtivo = false;
+    return this.usuariosRepository.save(usuario);
   }
 
   async remove(id: number) {
