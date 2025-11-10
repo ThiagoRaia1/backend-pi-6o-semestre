@@ -18,10 +18,9 @@ export class CreateAlunoDto {
   @IsString({ message: 'CPF deve ser um texto válido' })
   cpf: string;
 
+  @IsDateString({}, { message: 'Deve ser uma data válida' })
   @IsNotEmpty({ message: 'Data de nascimento é obrigatória' })
-  @IsDateString({}, { message: 'Deve ser uma data válida' }) // depois os validators
-  @Type(() => Date) // Verifica os transformers primeiro
-  dataNascimento: Date;
+  dataNascimento: string;
 
   @IsEmail({}, { message: 'E-mail inválido' })
   email: string;

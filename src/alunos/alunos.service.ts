@@ -14,14 +14,17 @@ export class AlunosService {
   ) {}
 
   async create(createAlunoDto: CreateAlunoDto) {
-    const { aulas, ...rest } = createAlunoDto;
+    const { aulas, dataNascimento, ...rest } = createAlunoDto;
 
     const aluno = this.alunosRepository.create({
       ...rest,
-      aulas: aulas?.map((id) => ({ id }) as Aula), // transforma ids em objetos
+      dataNascimento: new Date(dataNascimento), // aqui converte corretamente
+      aulas: aulas?.map((id) => ({ id }) as Aula),
     });
 
-    return this.alunosRepository.save(aluno);
+    const resultado = await this.alunosRepository.save(aluno);
+    // console.log(resultado);
+    return resultado;
   }
 
   async createData(createAlunoDto: CreateAlunoDto[]) {
