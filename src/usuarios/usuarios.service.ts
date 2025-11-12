@@ -36,10 +36,18 @@ export class UsuariosService {
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     const user = await this.usuariosRepository.findOneBy({ id });
+
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
+
+    // Se o DTO incluir uma nova senha, criptografa antes de salvar
+    if (updateUsuarioDto.senha) {
+      updateUsuarioDto.senha = await bcrypt.hash(updateUsuarioDto.senha, 10);
+    }
+
     this.usuariosRepository.merge(user, updateUsuarioDto);
+
     return this.usuariosRepository.save(user);
   }
 
