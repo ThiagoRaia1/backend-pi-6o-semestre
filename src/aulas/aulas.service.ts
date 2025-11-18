@@ -111,6 +111,7 @@ export class AulasService {
       .createQueryBuilder('aula')
       .leftJoin('aula.usuario', 'usuario')
       .leftJoin('aula.alunos', 'aluno')
+      .leftJoin('aula.planoDeAula', 'plano')
       .select([
         'aula.id',
         'aula.data',
@@ -118,6 +119,7 @@ export class AulasService {
         'aluno.id',
         'aluno.nome',
         'aluno.descricao',
+        'plano.plano'
       ])
       .getMany();
   }

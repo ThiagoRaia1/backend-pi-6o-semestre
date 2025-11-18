@@ -1,18 +1,9 @@
-import {
-  IsDateString,
-  IsInt,
-  IsArray,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsDateString, IsInt, IsArray, IsOptional } from 'class-validator';
+import { PlanosDeAula } from 'src/planos-de-aula/entities/planos-de-aula.entity';
 
 export class CreateAulaDto {
   @IsDateString({}, { message: 'Deve ser uma data válida' })
   data: string;
-
-  @IsString()
-  @IsOptional()
-  planoDeAula?: string;
 
   @IsInt()
   usuarioId: number;
@@ -20,4 +11,7 @@ export class CreateAulaDto {
   @IsOptional()
   @IsArray()
   alunosIds?: number[];
+
+  @IsOptional()
+  planoDeAula?: PlanosDeAula;
 }
