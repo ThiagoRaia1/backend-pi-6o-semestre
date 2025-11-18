@@ -5,4 +5,5 @@ export const config: TypeOrmModuleOptions = {
   database: 'database.sqlite',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   synchronize: true, // nao usar em prod
+  // logging: true,
 };

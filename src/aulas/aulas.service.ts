@@ -111,6 +111,7 @@ export class AulasService {
       .createQueryBuilder('aula')
       .leftJoin('aula.usuario', 'usuario')
       .leftJoin('aula.alunos', 'aluno')
+      .leftJoin('aula.planoDeAula', 'plano')
       .select([
         'aula.id',
         'aula.data',
@@ -118,6 +119,7 @@ export class AulasService {
         'aluno.id',
         'aluno.nome',
         'aluno.descricao',
+        'plano.plano',
       ])
       .getMany();
   }
@@ -177,16 +179,36 @@ export class AulasService {
       throw new NotFoundException(`Aula com ID ${id} não encontrada`);
     }
 
-    if (updateAulaDto.alunosIds && updateAulaDto.alunosIds.length > 0) {
-      const alunos = await this.alunoRepository.find({
-        where: { id: In(updateAulaDto.alunosIds) },
-      });
-      aula.alunos = alunos;
-    } else {
-      aula.alunos = []; // remove todos os alunos se vier um array vazio
+    const { alunosIds, ...dadosRestantes } = updateAulaDto;
+
+    // ------------------------------
+    // 1) Atualiza campos simples
+    // ------------------------------
+    if (Object.keys(dadosRestantes).length > 0) {
+      await this.aulaRepository.update(id, dadosRestantes);
     }
 
-    return this.aulaRepository.save(aula);
+    // ------------------------------
+    // 2) Atualiza Many-to-Many
+    // ------------------------------
+    if (alunosIds !== undefined) {
+      if (alunosIds.length > 0) {
+        const alunos = await this.alunoRepository.find({
+          where: { id: In(alunosIds) },
+        });
+        aula.alunos = alunos;
+      } else {
+        aula.alunos = []; // limpa todos
+      }
+
+      await this.aulaRepository.save(aula);
+    }
+
+    // Retorna a versão atualizada
+    return this.aulaRepository.findOne({
+      where: { id },
+      relations: ['alunos'],
+    });
   }
 
   async remove(id: number) {
