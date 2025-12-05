@@ -106,22 +106,10 @@ export class AulasService {
     return this.aulaRepository.save(aula);
   }
 
-  async findAll(): Promise<any[]> {
-    return this.aulaRepository
-      .createQueryBuilder('aula')
-      .leftJoin('aula.usuario', 'usuario')
-      .leftJoin('aula.alunos', 'aluno')
-      .leftJoin('aula.planoDeAula', 'plano')
-      .select([
-        'aula.id',
-        'aula.data',
-        'usuario.nome',
-        'aluno.id',
-        'aluno.nome',
-        'aluno.descricao',
-        'plano.plano',
-      ])
-      .getMany();
+  async findAll(): Promise<Aula[]> {
+    return this.aulaRepository.find({
+      relations: ['usuario', 'alunos', 'planoDeAula'],
+    });
   }
 
   async findAulasRegistradas(dataDia: string): Promise<Date[]> {
